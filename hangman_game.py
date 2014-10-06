@@ -1,8 +1,18 @@
 #!/usr/bin/env python
 
-import random,sys
 # Author : Sahil Dhar (SD HACKZ)
+# Description : A commandline Game [hangman] in pure python
+
+import random,sys
+
 def create_ques(ch):
+    """
+    Function to create question in the requested format 
+    like if the name is Die Hard this function will return word with
+    only vowels and replace other chars by _(underscore)
+        _ie/_a__
+    
+    """
     strtoprint = ""
     for chars  in ch.lower():
             if chars == 'a' or chars == 'e' or chars == 'i'or chars == 'o' or chars == u'':
@@ -15,6 +25,10 @@ def create_ques(ch):
 
 
 def checkinuserinput(u):
+    
+    """
+    Boolean function implemented to check the same input given by the user
+    """
     if u in set(user_inp_list):
         return  True
 
@@ -23,10 +37,15 @@ def checkinuserinput(u):
 
 
 def run_test(user_char,ques_list,ori_list,Question,answer,index):
-    global user_inp_list
-    global Q
-    global  stripped_user_inp
-    global score;global loss
+    """
+    All the main activity of game including checking of user input adding 
+    scores is carried out here.
+    """
+    
+    global user_inp_list        #global list maintaing the user inputs for checking the same input
+    global Q                    # global variable holding the new and old formatted questions
+    global  stripped_user_inp   #stripping out the symbols from the latest Question generated
+    global score;global loss 
     flag = False
 
 
@@ -46,14 +65,14 @@ def run_test(user_char,ques_list,ori_list,Question,answer,index):
     stripped_answer = "".join(k for k in answer if k != " " and k != "\n")
 
 
+    if len(stripped_user_inp) != len (stripped_answer): # matches user input with actual answer 
 
-    if len(stripped_user_inp) != len (stripped_answer):
         if flag == True and loss < 7  :
 
-            if len(user_inp_list) > 1 and checkinuserinput(user_char) == False:
+            if len(user_inp_list) > 1 and checkinuserinput(user_char) == False: #check for repeated input
                 score = score + 1
             else:
-                score = score
+                score = score # if repeated input found score will remain same
 
         elif flag == False and loss < 7:
             if len(user_inp_list) > 1 and checkinuserinput(user_char) == False :
@@ -64,9 +83,9 @@ def run_test(user_char,ques_list,ori_list,Question,answer,index):
         print "Question ---> ",Q,"\n\n Total Score : ",str(score),"\t Wrong Attempts : ",chances[0:loss]
     else:
          score = score + 1
-         print "You Got the Answer : ",Q.replace("/"," "),"\n\n"
-         user_inp_list = ['a','e','i','o','u']
-         movie_list.pop(index)
+         print "You Got the Answer : ",Q.replace("/"," "),"\n\n" 
+         user_inp_list = ['a','e','i','o','u'] # initializing again to initial list removing all user input for next ques
+         movie_list.pop(index) # removing the item from the list so to avoid repeated ques
 
          main_game()
 
@@ -74,7 +93,7 @@ def run_test(user_char,ques_list,ori_list,Question,answer,index):
 
 
 def main_game():
-     if len(movie_list) != 0:
+     if len(movie_list) != 0: #check for the end of game i.e movie_list is empty or not
         index = random.randint(0,len(movie_list) - 1)
         answer =  movie_list[index]
         Q = create_ques(answer)
